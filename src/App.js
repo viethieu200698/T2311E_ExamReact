@@ -1,92 +1,85 @@
-// App.js
-import React, { useState } from 'react';
-import './App.css';
+import React, { useState, useEffect } from 'react';
 
-const App = () => {
-  const [bookInfo, setBookInfo] = useState({
-    title: '',
-    author: '',
-    ISBN: ''
-  });
-  const [message, setMessage] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+const AddInformationForm = () => {
+  const [title, setTitle] = useState('');
+  const [author, setAuthor] = useState('');
+  const [favorite, setFavorite] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
   const [books, setBooks] = useState([]);
-  
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setBookInfo({
-      ...bookInfo,
-      [name]: value
-    });
-  };
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+
+  useEffect(() => {
+    const results = books.filter(book =>
+      book.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+    setSearchResults(results);
+  }, [searchTerm, books]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!bookInfo.title || !bookInfo.author || !bookInfo.ISBN) {
-      setMessage('Please fill in all fields.');
-      return;
+    try {      
+      setSuccessMessage('File saved successfully');
+      const newBook = { title: title, author: author, favorite: favorite };
+      setBooks([...books, newBook]);
+
+      
+      setTitle('');
+      setAuthor('');
+      setFavorite(false);
+    } catch (error) {
+      
     }
-
-    // Save to JSON file (simulated)
-    saveToJsonFile(bookInfo);
-    setMessage('File saved successfully.');
-    setBookInfo({ title: '', author: '', ISBN: '' });
   };
-
-  const saveToJsonFile = (data) => {
-    // In a real application, you would perform actual file saving operations here
-    setBooks([...books, data]); // Simulating adding book to a list
-  };
-
-  const handleSearch = (e) => {
-    setSearchTerm(e.target.value);
-  };
-
-  const filteredBooks = books.filter(book => {
-    const { title, author, ISBN } = book;
-    return title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           author.toLowerCase().includes(searchTerm.toLowerCase()) ||
-           ISBN.toLowerCase().includes(searchTerm.toLowerCase());
-  });
 
   return (
     <div className="container">
-      <h1>Hệ thống quản lý thư viện</h1>
-      <div className="search-bar">
-        <input type="text" placeholder="Tìm kiếm..." value={searchTerm} onChange={handleSearch} />
+      <div className="row justify-content-center">
+        <div className="col-md-6">
+          <div className="card">
+            <div className="card-body">
+              <h3 className="card-title text-center mb-4" style={{ color: '#007bff' }}>Thư viện tìm kiếm sách</h3>
+              <form onSubmit={handleSubmit}>
+                <div className="mb-3">
+                  <label htmlFor="title" className="form-label">Tên sách:</label>
+                  <input type="text" id="title" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
+                </div>
+                <div className="mb-3">
+                  <label htmlFor="author" className="form-label">Tác giả:</label>
+                  <input type="text" id="author" className="form-control" value={author} onChange={(e) => setAuthor(e.target.value)} required />
+                </div>
+                <div className="mb-3 form-check">
+                  <input type="checkbox" id="favorite" className="form-check-input" checked={favorite} onChange={(e) => setFavorite(e.target.checked)} />
+                  <label htmlFor="favorite" className="form-check-label">Ưa thích</label>
+                </div>
+                <button type="submit" className="btn btn-primary">Tìm kiếm</button>
+              </form>
+              {successMessage && <p className="text-success text-center mt-3">{successMessage}</p>}
+            </div>
+          </div>
+        </div>
       </div>
-      <div className="add-book">
-        <h2>Thêm một cuốn sách mới</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label>Tiêu đề:</label>
-            <input type="text" name="Tiêu đề" value={bookInfo.title} onChange={handleInputChange} />
-          </div>
-          <div className="form-group">
-            <label>Tác giả :</label>
-            <input type="text" name="Tác Giả" value={bookInfo.author} onChange={handleInputChange} />
-          </div>
-          <div className="form-group">
-            <label>ISBN:</label>
-            <input type="text" name="ISBN" value={bookInfo.ISBN} onChange={handleInputChange} />
-          </div>
-          <button type="submit">Thêm sách</button>
-        </form>
-        {message && <p className="message">{message}</p>}
-      </div>
-      <div className="Danh sách">
-        <h2>Danh sách</h2>
-        <ul>
-          {filteredBooks.map((book, index) => (
-            <li key={index}>
-              <strong>Title:</strong> {book.title}, <strong>Author:</strong> {book.author}, <strong>ISBN:</strong> {book.ISBN}
-            </li>
-          ))}
-        </ul>
+      <div className="row mt-4">
+        <div className="col-md-6 offset-md-3">
+          <h3 className="text-center" style={{ color: '#007bff' }}>Danh Sách sách</h3>
+          <input
+            type="text"
+            className="form-control mb-3"
+            placeholder="Tìm kiếm"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+          <ul className="list-group">
+            {searchResults.map((book, index) => (
+              <li key={index} className="list-group-item">
+                <strong style={{ color: '#007bff' }}>Title:</strong> {book.title}, <strong style={{ color: '#007bff' }}>Author:</strong> {book.author}, <strong style={{ color: '#007bff' }}>Favorite:</strong> {book.favorite ? 'Yes' : 'No'}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
 };
 
-
-export default App;
+export default AddInformationForm;
