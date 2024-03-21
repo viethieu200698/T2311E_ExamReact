@@ -26,25 +26,18 @@ const AddInformationForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Perform form validation here
-
-    // Save data to JSON file
+    
     try {
-      // Make HTTP request to save data
-      // Display success message
-      setSuccessMessage('File saved successfully');
-
-      // Add the new book to the list of books
+      
+      setSuccessMessage('File saved successfully');     
       const newBook = { title: title, author: author, favorite: favorite, genre: selectedGenre };
       setBooks([...books, newBook]);
-
-      // Reset form fields
       setTitle('');
       setAuthor('');
       setFavorite(false);
       setSelectedGenre('');
     } catch (error) {
-      // Handle error
+      
     }
   };
 
