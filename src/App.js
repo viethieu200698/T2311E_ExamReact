@@ -8,6 +8,8 @@ const AddInformationForm = () => {
   const [books, setBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [searchResults, setSearchResults] = useState([]);
+  const [selectedGenre, setSelectedGenre] = useState('');
+  const [genres] = useState(['Khoa học', 'Toán học', 'Văn học', 'Lịch sử','Truyện tranh','Sinh học']);
 
   useEffect(() => {
     const results = books.filter(book =>
@@ -16,19 +18,33 @@ const AddInformationForm = () => {
     setSearchResults(results);
   }, [searchTerm, books]);
 
+  const handleGenreClick = (genre) => {
+    setSelectedGenre(genre);
+    setSearchTerm('');
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    try {      
+
+    // Perform form validation here
+
+    // Save data to JSON file
+    try {
+      // Make HTTP request to save data
+      // Display success message
       setSuccessMessage('File saved successfully');
-      const newBook = { title: title, author: author, favorite: favorite };
+
+      // Add the new book to the list of books
+      const newBook = { title: title, author: author, favorite: favorite, genre: selectedGenre };
       setBooks([...books, newBook]);
 
-      
+      // Reset form fields
       setTitle('');
       setAuthor('');
       setFavorite(false);
+      setSelectedGenre('');
     } catch (error) {
-      
+      // Handle error
     }
   };
 
@@ -48,6 +64,21 @@ const AddInformationForm = () => {
                   <label htmlFor="author" className="form-label">Tác giả:</label>
                   <input type="text" id="author" className="form-control" value={author} onChange={(e) => setAuthor(e.target.value)} required />
                 </div>
+                <div className="mb-3">
+                  <label htmlFor="genre" className="form-label">Thể loại:</label>
+                  <div className="btn-group d-flex">
+                    {genres.map((genre, index) => (
+                      <button
+                        key={index}
+                        type="button"
+                        className={`btn btn-outline-primary ${selectedGenre === genre ? 'active' : ''}`}
+                        onClick={() => handleGenreClick(genre)}
+                      >
+                        {genre}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <div className="mb-3 form-check">
                   <input type="checkbox" id="favorite" className="form-check-input" checked={favorite} onChange={(e) => setFavorite(e.target.checked)} />
                   <label htmlFor="favorite" className="form-check-label">Ưa thích</label>
@@ -61,7 +92,7 @@ const AddInformationForm = () => {
       </div>
       <div className="row mt-4">
         <div className="col-md-6 offset-md-3">
-          <h3 className="text-center" style={{ color: '#007bff' }}>Danh Sách sách</h3>
+          <h3 className="text-center" style={{ color: '#007bff' }}>Danh sách sách</h3>
           <input
             type="text"
             className="form-control mb-3"
@@ -72,7 +103,7 @@ const AddInformationForm = () => {
           <ul className="list-group">
             {searchResults.map((book, index) => (
               <li key={index} className="list-group-item">
-                <strong style={{ color: '#007bff' }}>Title:</strong> {book.title}, <strong style={{ color: '#007bff' }}>Author:</strong> {book.author}, <strong style={{ color: '#007bff' }}>Favorite:</strong> {book.favorite ? 'Yes' : 'No'}
+                <strong style={{ color: '#007bff' }}>Title:</strong> {book.title}, <strong style={{ color: '#007bff' }}>Author:</strong> {book.author}, <strong style={{ color: '#007bff' }}>Favorite:</strong> {book.favorite ? 'Yes' : 'No'}, <strong style={{ color: '#007bff' }}>Genre:</strong> {book.genre}
               </li>
             ))}
           </ul>
