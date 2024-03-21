@@ -51,31 +51,31 @@ const App = () => {
 
   return (
     <div className="container">
-      <h1>Library Management System</h1>
+      <h1>Hệ thống quản lý thư viện</h1>
       <div className="search-bar">
         <input type="text" placeholder="Tìm kiếm..." value={searchTerm} onChange={handleSearch} />
       </div>
       <div className="add-book">
-        <h2>Add a New Book</h2>
+        <h2>Thêm một cuốn sách mới</h2>
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Title:</label>
+            <label>Tiêu đề:</label>
             <input type="text" name="Tiêu đề" value={bookInfo.title} onChange={handleInputChange} />
           </div>
           <div className="form-group">
-            <label>Author:</label>
+            <label>Tác giả :</label>
             <input type="text" name="Tác Giả" value={bookInfo.author} onChange={handleInputChange} />
           </div>
           <div className="form-group">
             <label>ISBN:</label>
             <input type="text" name="ISBN" value={bookInfo.ISBN} onChange={handleInputChange} />
           </div>
-          <button type="submit">Add Book</button>
+          <button type="submit">Thêm sách</button>
         </form>
         {message && <p className="message">{message}</p>}
       </div>
       <div className="Danh sách">
-        <h2>Book List</h2>
+        <h2>Danh sách</h2>
         <ul>
           {filteredBooks.map((book, index) => (
             <li key={index}>
