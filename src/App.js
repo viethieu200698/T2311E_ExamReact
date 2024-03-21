@@ -54,11 +54,11 @@ const AddInformationForm = () => {
                   <input type="text" id="title" className="form-control" value={title} onChange={(e) => setTitle(e.target.value)} required />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="author" className="form-label">Tác giả:</label>
-                  <input type="text" id="author" className="form-control" value={author} onChange={(e) => setAuthor(e.target.value)} required />
+                  <label htmlFor="Athor" className="form-label">Tác giả:</label>
+                  <input type="text" id="Athor" className="form-control" value={author} onChange={(e) => setAuthor(e.target.value)} required />
                 </div>
                 <div className="mb-3">
-                  <label htmlFor="genre" className="form-label">Thể loại:</label>
+                  <label htmlFor="Label " className="form-label">Thể loại:</label>
                   <div className="btn-group d-flex">
                     {genres.map((genre, index) => (
                       <button
